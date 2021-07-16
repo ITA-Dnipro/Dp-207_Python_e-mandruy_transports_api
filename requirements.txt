@@ -4,6 +4,7 @@ cffi==1.14.6
 constantly==15.1.0
 cryptography==3.4.7
 cssselect==1.1.0
+flake8==3.9.2
 h2==3.2.0
 hpack==3.0.0
 hyperframe==5.2.0
@@ -14,13 +15,16 @@ itemadapter==0.3.0
 itemloaders==1.0.4
 jmespath==0.10.0
 lxml==4.6.3
+mccabe==0.6.1
 parsel==1.6.0
 priority==1.3.0
 Protego==0.1.16
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
+pycodestyle==2.7.0
 pycparser==2.20
 PyDispatcher==2.0.5
+pyflakes==2.3.1
 pyOpenSSL==20.0.1
 queuelib==1.6.1
 Scrapy==2.5.0
