@@ -1,0 +1,8 @@
+.vscode
+.env
+__pycache__
+twistd.pid
+dbs/*
+logs/*
+!dbs/.gitkeep
+!logs/.gitkeep
