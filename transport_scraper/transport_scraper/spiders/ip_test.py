@@ -1,7 +1,20 @@
 import scrapy
+from ..middlewares import RandomUserAgentMiddleware
 
 
 class IpTestSpider(scrapy.Spider):
+    custom_settings = {
+        'DOWNLOADER_MIDDLEWARES': {
+            (
+                'scrapy.contrib.downloadermiddleware.'
+                'useragent.UserAgentMiddleware'
+                ): None,
+            (
+                RandomUserAgentMiddleware
+            ): 400
+        }
+    }
+
     name = 'ip_test'
     start_urls = ["http://atomurl.net/myip/"]
 

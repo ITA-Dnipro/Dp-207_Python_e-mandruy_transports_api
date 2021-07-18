@@ -3,9 +3,22 @@ from scrapy.http import FormRequest, Request
 from datetime import datetime
 import pytz
 import json
+from ..middlewares import RandomUserAgentMiddleware
 
 
 class PoezdatoBlablacarsSpider(scrapy.Spider):
+    custom_settings = {
+        'DOWNLOADER_MIDDLEWARES': {
+            (
+                'scrapy.contrib.downloadermiddleware.'
+                'useragent.UserAgentMiddleware'
+                ): None,
+            (
+                RandomUserAgentMiddleware
+            ): 400
+        }
+    }
+
     name = 'poezdato_blablacars'
     POEZDATO_API_PART_URL = 'https://poezdato.net/search/get-trips2?'
     start_urls = ["https://poezdato.net/"]

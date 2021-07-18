@@ -3,9 +3,23 @@ from scrapy.http import JsonRequest
 import json
 from datetime import datetime
 import pytz
+from ..middlewares import RandomUserAgentMiddleware
 
 
 class PoezdUaSpider(scrapy.Spider):
+    custom_settings = {
+        'DOWNLOADER_MIDDLEWARES': {
+            (
+                'scrapy.contrib.downloadermiddleware.'
+                'useragent.UserAgentMiddleware'
+                ): None,
+            (
+                RandomUserAgentMiddleware
+            ): 400
+        },
+        'HTTPERROR_ALLOWED_CODES': [418, 411],
+    }
+
     name = 'poezd_ua'
     start_urls = ['http://poezd.ua/']
 
