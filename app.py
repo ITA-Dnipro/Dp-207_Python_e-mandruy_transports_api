@@ -6,6 +6,10 @@ from transport_scraper.transport_scraper.\
     spiders.poezdato_blablacars import PoezdatoBlablacarsSpider
 from transport_scraper.transport_scraper.\
     spiders.poezd_ua import PoezdUaSpider
+from api_utils.jwt_helpers import (
+    is_valid_jwt_token, jwt_error_response
+)
+
 
 app = Klein()
 
@@ -45,6 +49,12 @@ def error_405():
 def poezdato_blablacars(request):
     if request.method != b"POST":
         return error_405()
+    # jwt check
+    auth_token = request.getHeader('authorization')
+    jwt_check = is_valid_jwt_token(auth_token)
+    if jwt_check is not True:
+        return jwt_error_response(jwt_check)
+    #
     json_payload = json.loads(request.content.read())
     #
     runner = SpiderRunner()
@@ -62,6 +72,12 @@ def poezdato_blablacars(request):
 def poezd_ua(request):
     if request.method != b"POST":
         return error_405()
+    # jwt check
+    auth_token = request.getHeader('authorization')
+    jwt_check = is_valid_jwt_token(auth_token)
+    if jwt_check is not True:
+        return jwt_error_response(jwt_check)
+    #
     json_payload = json.loads(request.content.read())
     #
     runner = SpiderRunner()
