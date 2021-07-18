@@ -22,3 +22,22 @@ docker image rm -f ${PWD##*/}-image
 .env
 .env.example
 ```
+### api endpoints examples:
+```
+1. POST /api/v.1.0/cars
+json payload example:
+{
+    "departure_name": "Одесса",
+    "departure_date": "22.07.2021",
+    "arrival_name": "Харьков"
+}
+```
+```
+2. POST /api/v.1.0/trains
+{
+    "departure_name": "Одесса",
+    "departure_date": "22.07.2021",
+    "arrival_name": "Харьков"
+}
+```
+JWT token required for all api endpoints.
