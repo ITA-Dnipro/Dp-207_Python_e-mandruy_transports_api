@@ -73,38 +73,54 @@ class PoezdUaSpider(scrapy.Spider):
             for station_type in jsonresponse['departure']:
                 if station_type['type'] == 'main':
                     for train in station_type['train']:
-                        result_dict['trips'].append(
-                            {
-                                'train_name': train['name'],
-                                'train_number': train['number'],
-                                'train_uid': (
-                                    station_type['trains_uids']
-                                    [train['number']]
-                                ),
-                                'departure_name': (
-                                    train['station_from']['name']
-                                ),
-                                'departure_code': (
-                                    train['station_from']['code']
-                                ),
-                                'departure_date': (
-                                    train['departure_date']['original']
-                                ),
-                                'arrival_name': (
-                                    train['station_to']['name']
-                                ),
-                                'arrival_code': (
-                                    train['station_to']['code']
-                                ),
-                                'arrival_date': (
-                                    train['arrival_date']['original']
-                                ),
-                                'in_route_time': (
-                                    train['travel_time']['human']
-                                ),
-                                'parsed_time': parsed_time,
-                                'source_name': 'poezd.ua',
-                                'source_url': response.url
-                            }
+                        #
+                        result_train_dict = {}
+                        #
+                        result_train_dict['train_name'] = train.get('name')
+                        result_train_dict['train_number'] = train.get('number')
+                        result_train_dict['train_uid'] = get_train_uid(
+                            station_type=station_type,
+                            train=train
                         )
+                        result_train_dict['departure_name'] = (
+                            train.get('station_from', {}).get('name')
+                        )
+                        result_train_dict['departure_code'] = (
+                            train.get('station_from', {}).get('code')
+                        )
+                        result_train_dict['departure_date'] = (
+                            train.get('departure_date', {}).get('original')
+                        )
+                        result_train_dict['arrival_name'] = (
+                            train.get('station_to', {}).get('name')
+                        )
+                        result_train_dict['arrival_code'] = (
+                            train.get('station_to', {}).get('code')
+                        )
+                        result_train_dict['arrival_date'] = (
+                            train.get('arrival_date', {}).get('original')
+                        )
+                        result_train_dict['in_route_time'] = (
+                            train.get('travel_time', {}).get('human')
+                        )
+                        result_train_dict['parsed_time'] = parsed_time
+                        result_train_dict['source_name'] = 'poezd.ua'
+                        result_train_dict['source_url'] = response.url
+                        #
+                        result_dict['trips'].append(result_train_dict)
+        #
         yield result_dict
+
+
+def get_train_uid(station_type, train):
+    '''
+    Return train uid from station_type dict
+    '''
+    train_uuids = station_type.get('trains_uids')
+    if isinstance(train_uuids, dict):
+        train_number = train.get('number')
+        train_uid = train_uuids.get(train_number)
+        return train_uid
+    else:
+        train_uid = None
+        return train_uid

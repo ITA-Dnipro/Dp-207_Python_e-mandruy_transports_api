@@ -106,26 +106,23 @@ class PoezdatoBlablacarsSpider(scrapy.Spider):
             result_dict['arrival_name'] = self.arrival_name
             result_dict['parsed_time'] = parsed_time
             result_dict['source_name'] = 'poezdato/blablacar'
-            result_dict['source_url'] = jsonresponse['url']
+            result_dict['source_url'] = jsonresponse.get('url')
             # result_dict['blablacar_trips_url'] = jsonresponse['url']
             result_dict['trips'] = []
-            for t in jsonresponse['trips']:
-                try:
-                    car_model = t['car_model']
-                except KeyError:
-                    car_model = None
-                result_dict['trips'].append(
-                    {
-                        'departure_name': t['src'],
-                        'departure_date': t['departure'],
-                        'arrival_name': t['dst'],
-                        'price': t['price'],
-                        'car_model': car_model,
-                        'blablacar_url': t['link'],
-                        'parsed_time': parsed_time,
-                        'source_name': 'poezdato/blablacar',
-                        'source_url': response.url,
-
-                    }
-                )
+            for trip in jsonresponse['trips']:
+                #
+                car_result_dict = {}
+                #
+                car_result_dict['departure_name'] = trip.get('src')
+                car_result_dict['departure_date'] = trip.get('departure')
+                car_result_dict['arrival_name'] = trip.get('dst')
+                car_result_dict['price'] = trip.get('price')
+                car_result_dict['car_model'] = trip.get('car_model')
+                car_result_dict['blablacar_url'] = trip.get('link')
+                car_result_dict['parsed_time'] = parsed_time
+                car_result_dict['source_name'] = 'poezdato/blablacar'
+                car_result_dict['source_url'] = response.url
+                #
+                result_dict['trips'].append(car_result_dict)
+        #
         yield result_dict
