@@ -9,7 +9,7 @@ from transport_scraper.transport_scraper.\
 from api_utils.jwt_helpers import (
     is_valid_jwt_token, jwt_error_response
 )
-
+import os
 
 app = Klein()
 
@@ -92,4 +92,5 @@ def poezd_ua(request):
 
 
 if __name__ == "__main__":
-    app.run('0.0.0.0', 4500)
+    port = int(os.environ.get("PORT"))
+    app.run(host='0.0.0.0', port=port)
